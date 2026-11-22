@@ -1,0 +1,610 @@
+<title>VisualPro</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: cabeçalho fixo claro, faixas alternadas (escuro / claro) com cabeçalhos de secção alinhados à esquerda.
+   Para trocar contactos ou links: procurar "wa.me" e as ligações de redes sociais no HTML. */
+:root{
+  --ink:#111315;
+  --ink-soft:#23272b;
+  --muted:#5a5f66;
+  --gold:#F59E0B;
+  --gold-mid:#D97706;
+  --gold-text:#B45309;
+  --gold-tint:#FDEBC8;
+  --cream:#FAF9F6;
+  --paper:#FFFFFF;
+  --line:#E8E4DA;
+  --field:#8A857B;
+  --on-dark-soft:rgba(255,255,255,.76);
+  --line-dark:rgba(255,255,255,.16);
+  --font:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --radius:12px;
+  --radius-lg:20px;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:84px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--font);font-size:1rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--cream);z-index:60}
+img{display:block;max-width:100%;height:auto}
+h1,h2,h3,p,ul,ol,figure{margin:0}
+h1,h2,h3{text-wrap:balance;letter-spacing:-.015em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.skip{position:absolute;left:-9999px;top:8px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;z-index:100}
+.skip:focus{left:16px}
+
+.wrap{width:100%;max-width:1160px;margin-inline:auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.section{padding-block:clamp(56px,9vw,104px)}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-text)}
+.h2{font-size:clamp(1.75rem,3.6vw,2.6rem);font-weight:800;line-height:1.12}
+.lead{font-size:1.08rem;color:var(--muted);max-width:60ch}
+.section-head{display:grid;gap:12px;margin-bottom:clamp(28px,5vw,48px)}
+.dark{background:var(--ink);color:#fff}
+.dark .eyebrow{color:var(--gold)}
+.dark .lead{color:var(--on-dark-soft)}
+
+/* Botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:10px;border:2px solid transparent;font:700 .97rem/1.1 var(--font);text-decoration:none;cursor:pointer;text-align:center;transition:background-color .15s,border-color .15s,color .15s}
+.btn svg{width:20px;height:20px;flex:none}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-gold:hover{background:#FBBF24}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:var(--ink-soft)}
+.btn-ghost{border-color:rgba(255,255,255,.55);color:#fff}
+.btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.btn-sm{min-height:42px;padding:0 18px;font-size:.9rem}
+
+/* Cabeçalho */
+.site-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--cream);border-bottom:1px solid var(--line)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:68px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{height:30px;width:auto}
+.brand-word{font-size:1.28rem;font-weight:800;letter-spacing:-.02em;line-height:1}
+.brand-word b{color:var(--gold-mid);font-weight:800}
+.nav-toggle{display:inline-grid;place-items:center;width:46px;height:46px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);cursor:pointer}
+.nav-toggle svg{width:22px;height:22px}
+.nav{position:absolute;left:0;right:0;top:100%;display:none;flex-direction:column;gap:2px;background:var(--cream);border-bottom:1px solid var(--line);padding:8px max(20px,env(safe-area-inset-right,0px)) 20px max(20px,env(safe-area-inset-left,0px))}
+.nav.open{display:flex}
+.nav a:not(.btn){display:block;padding:12px 0;font-weight:600;text-decoration:none;border-bottom:1px solid var(--line)}
+.nav a:not(.btn):hover{color:var(--gold-text)}
+.nav .btn{margin-top:14px}
+@media (min-width:1040px){
+  .nav-toggle{display:none}
+  .nav{position:static;display:flex;flex-direction:row;align-items:center;gap:26px;padding:0;border:0;background:none}
+  .nav a:not(.btn){padding:6px 0;border:0;font-size:.92rem}
+  .nav .btn{margin:0}
+}
+
+/* Início */
+.hero{background:var(--ink);color:#fff;padding-block:clamp(40px,7vw,92px)}
+.hero-grid{display:grid;gap:40px;align-items:center}
+.hero-grid>*{min-width:0}
+@media (min-width:900px){.hero-grid{grid-template-columns:1.02fr 1fr;gap:56px}}
+.hero-kicker{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.hero-kicker span:first-child{color:#fff}
+.hero h1{margin-top:18px;font-size:clamp(2.3rem,5.6vw,3.9rem);font-weight:800;line-height:1.06;letter-spacing:-.03em}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p.lead{margin-top:20px;color:var(--on-dark-soft)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.hero-media img{width:100%;border-radius:var(--radius-lg);box-shadow:0 0 0 1px rgba(255,255,255,.1)}
+
+/* Sobre */
+.about{background:var(--paper)}
+.about-grid{display:grid;gap:36px;align-items:center}
+.about-grid>*{min-width:0}
+@media (min-width:900px){.about-grid{grid-template-columns:.8fr 1fr;gap:64px}}
+.about-media img{width:100%;aspect-ratio:4/4.6;object-fit:cover;border-radius:var(--radius-lg)}
+.about-text{display:grid;gap:18px}
+.about-text p{color:var(--muted);font-size:1.06rem}
+.about-call{font-size:1.2rem;font-weight:700;line-height:1.35;color:var(--ink)!important;padding-left:18px;border-left:4px solid var(--gold)}
+.audience-title{margin-top:10px;font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-text)}
+.audience{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px 20px;list-style:none;padding:0}
+.audience li{padding-top:12px;border-top:2px solid var(--line)}
+.audience strong{display:block;font-size:.98rem}
+.audience span{display:block;font-size:.88rem;color:var(--muted);line-height:1.45}
+
+/* Serviços */
+.services{background:var(--cream)}
+.service-grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:720px){.service-grid{grid-template-columns:repeat(2,1fr)}}
+.service{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;align-items:start;padding:22px 24px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius)}
+.service h3,.service p{min-width:0}
+.service .ico{grid-row:1 / span 2;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--gold-tint);color:var(--ink)}
+.service .ico svg{width:22px;height:22px}
+.service h3{font-size:1.05rem;font-weight:700;align-self:end}
+.service p{font-size:.94rem;color:var(--muted)}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-top:clamp(28px,5vw,44px)}
+.cta-row p{color:var(--muted)}
+
+/* Como trabalhamos */
+.steps{list-style:none;padding:0;display:grid;gap:30px}
+.step{position:relative;padding-left:64px;min-width:0}
+.step-num{position:absolute;left:0;top:0;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--gold);color:var(--ink);font-weight:800}
+.step::after{content:"";position:absolute;left:21px;top:52px;bottom:-26px;width:2px;background:var(--line-dark)}
+.step:last-child::after{display:none}
+.step h3{font-size:1.06rem;font-weight:700;color:#fff}
+.step p{margin-top:6px;font-size:.93rem;color:var(--on-dark-soft)}
+@media (min-width:900px){
+  .steps{grid-template-columns:repeat(5,1fr);gap:22px}
+  .step{padding:66px 0 0}
+  .step::after{left:56px;right:-10px;top:21px;bottom:auto;width:auto;height:2px}
+}
+.payment{display:grid;gap:6px;margin-top:clamp(36px,6vw,56px);padding-top:24px;border-top:1px solid var(--line-dark)}
+.payment strong{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.payment p{color:var(--on-dark-soft);max-width:70ch}
+
+/* Portfólio */
+.portfolio{background:var(--paper)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+.chip{min-height:42px;padding:0 16px;border:1px solid var(--field);border-radius:10px;background:var(--paper);color:var(--ink);font:600 .88rem/1 var(--font);cursor:pointer;transition:background-color .15s,color .15s}
+.chip:hover{background:var(--cream)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.work-grid{column-count:1;column-gap:20px}
+@media (min-width:620px){.work-grid{column-count:2}}
+@media (min-width:980px){.work-grid{column-count:3}}
+.work{display:flex;flex-direction:column;width:100%;margin:0 0 20px;break-inside:avoid;-webkit-column-break-inside:avoid;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--paper)}
+.work-zoom{display:block;width:100%;padding:0;border:0;background:var(--cream);cursor:zoom-in}
+.work-zoom img{width:100%;height:auto}
+.work figcaption{display:grid;gap:2px;padding:14px 16px 16px}
+.work .cat{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-text)}
+.work .ttl{font-weight:700}
+.work .note{font-size:.84rem;color:var(--muted)}
+.work-soon{border-style:dashed;border-color:#CFC8B8;background:var(--cream)}
+.work-empty{display:flex;align-items:center;gap:10px;padding:14px 16px 0;color:var(--muted);font-size:.84rem;font-weight:600}
+.work-empty svg{width:20px;height:20px;flex:none;color:var(--gold-text)}
+.work-soon figcaption{padding:6px 16px 14px}
+.lightbox{width:min(94vw,980px);max-height:94vh;padding:0;border:0;border-radius:var(--radius);background:var(--ink);color:#fff;overflow:auto}
+.lightbox::backdrop{background:rgba(17,19,21,.84)}
+.lightbox-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;font-size:.92rem;font-weight:600}
+.lightbox-bar button{min-height:40px;padding:0 16px;border:1px solid rgba(255,255,255,.45);border-radius:8px;background:transparent;color:#fff;font:600 .9rem var(--font);cursor:pointer}
+.lightbox-bar button:hover{border-color:#fff}
+.lightbox img{display:block;width:100%;height:auto}
+
+/* Contactos */
+.contacts{background:var(--cream)}
+.contact-grid{display:grid;gap:40px;align-items:start}
+.contact-grid>*{min-width:0}
+@media (min-width:960px){.contact-grid{grid-template-columns:1fr 1.05fr;gap:64px}}
+.contact-info{display:grid;gap:26px}
+.contact-block{display:grid;gap:10px}
+.contact-block h3{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-text)}
+.wa-line{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:14px 0;border-top:1px solid var(--line)}
+.wa-line:last-child{border-bottom:1px solid var(--line)}
+.num{font-size:1.4rem;font-weight:800;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.mail-link{display:inline-block;font-size:1.1rem;font-weight:700;overflow-wrap:anywhere;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px}
+.mail-link:hover{color:var(--gold-text)}
+.socials{display:flex;flex-wrap:wrap;gap:10px}
+.social{display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:0 16px;border:1px solid var(--field);border-radius:10px;background:var(--paper);text-decoration:none;font-weight:600;font-size:.92rem;transition:border-color .15s,background-color .15s}
+.social:hover{border-color:var(--ink);background:#fff}
+.social svg{width:20px;height:20px;flex:none}
+.social small{display:block;font-size:.76rem;font-weight:500;color:var(--muted);line-height:1.2}
+.form-card{padding:clamp(22px,4vw,34px);background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg)}
+.form-card h3{font-size:1.3rem;font-weight:800;margin-bottom:4px}
+.form-card>p{color:var(--muted);font-size:.94rem;margin-bottom:20px}
+.form-row{display:grid;gap:16px}
+@media (min-width:560px){.form-row.two{grid-template-columns:1fr 1fr}}
+.field{display:grid;gap:6px;margin-bottom:16px;min-width:0}
+.field label{font-size:.86rem;font-weight:600}
+.field input,.field textarea{width:100%;min-height:48px;padding:12px 14px;border:1px solid var(--field);border-radius:10px;background:#fff;color:var(--ink);font:400 1rem/1.4 var(--font)}
+.field textarea{min-height:128px;resize:vertical}
+.field input:focus,.field textarea:focus{outline:3px solid var(--gold);outline-offset:0;border-color:var(--ink)}
+.form-card .btn{width:100%}
+.form-result{margin-top:16px;padding:16px;border-radius:10px;background:var(--gold-tint);display:grid;gap:12px}
+.form-result p{font-size:.94rem}
+
+/* Rodapé */
+.footer{background:var(--ink);color:#fff;padding-block:clamp(40px,6vw,64px) 28px}
+.footer-grid{display:grid;gap:32px}
+.footer-grid>*{min-width:0}
+@media (min-width:860px){.footer-grid{grid-template-columns:1.4fr 1fr 1fr;gap:48px}}
+.footer-brand{display:grid;gap:14px;align-content:start}
+.footer-brand img{width:56px;height:56px;border-radius:12px}
+.footer-brand strong{font-size:1.1rem;font-weight:800}
+.footer-brand p{color:var(--on-dark-soft);font-size:.94rem}
+.footer h3{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.footer ul{list-style:none;padding:0;display:grid;gap:8px}
+.footer a{text-decoration:none;color:var(--on-dark-soft)}
+.footer a:hover{color:#fff;text-decoration:underline}
+.footer .num-s{font-variant-numeric:tabular-nums;color:var(--on-dark-soft)}
+.footer-bottom{margin-top:36px;padding-top:20px;border-top:1px solid var(--line-dark);font-size:.84rem;color:var(--on-dark-soft)}
+</style>
+
+<a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#inicio" aria-label="VisualPro, início">
+      <img src="img/logo.png" alt="" width="45" height="30">
+      <span class="brand-word">Visual<b>Pro</b></span>
+    </a>
+    <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <nav class="nav" id="menu" aria-label="Principal">
+      <a href="#inicio">Início</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#como-trabalhamos">Como Trabalhamos</a>
+      <a href="#portfolio">Portfólio</a>
+      <a href="#contactos">Contactos</a>
+      <a class="btn btn-gold btn-sm" href="https://wa.me/244959275100?text=Ol%C3%A1!%20Gostaria%20de%20pedir%20um%20or%C3%A7amento." target="_blank" rel="noopener">Peça um orçamento</a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+
+<!-- 1. INÍCIO -->
+<section class="hero" id="inicio">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="hero-kicker"><span>VisualPro</span><span>Ideias que ganham vida</span></p>
+      <h1>A sua ideia merece <em>ganhar vida.</em></h1>
+      <p class="lead">A VisualPro ajuda empresas a criar uma imagem profissional e a fortalecer a sua presença digital através de soluções criativas e personalizadas.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="#servicos">Conheça os nossos serviços</a>
+        <!-- Botão de contacto ligado ao WhatsApp (primeiro número). Para mudar o número, alterar 244959275100. -->
+        <a class="btn btn-ghost" href="https://wa.me/244959275100?text=Ol%C3%A1!%20Gostaria%20de%20falar%20sobre%20o%20meu%20projeto." target="_blank" rel="noopener">Entre em contacto</a>
+      </div>
+    </div>
+    <div class="hero-media">
+      <img src="img/identidade-aplicada.jpg" width="1200" height="868" alt="Secretária de escritório com a identidade visual da VisualPro aplicada na parede, no caderno e na caneca">
+    </div>
+  </div>
+</section>
+
+<!-- 2. SOBRE -->
+<section class="section about" id="sobre">
+  <div class="wrap about-grid">
+    <div class="about-media">
+      <img src="img/secretaria.jpg" width="800" height="998" alt="Secretária de trabalho com computador portátil, telemóvel e uma caneca com o logótipo da VisualPro" loading="lazy">
+    </div>
+    <div class="about-text">
+      <p class="eyebrow">Sobre a VisualPro</p>
+      <h2 class="h2">Uma imagem forte para crescer no digital</h2>
+      <p>A VisualPro é uma empresa especializada em identidade visual, design gráfico e soluções digitais. Ajudamos empresas a criar uma imagem forte, profissional e preparada para crescer no mundo digital.</p>
+      <p class="about-call">Criamos soluções visuais e digitais para ajudar o seu negócio a crescer.</p>
+      <p class="audience-title">Para quem trabalhamos</p>
+      <ul class="audience">
+        <li><strong>PMEs</strong><span>Empresas em fase de expansão.</span></li>
+        <li><strong>Comércio local</strong><span>Lojas, restaurantes e espaços físicos.</span></li>
+        <li><strong>Startups</strong><span>Novos negócios e empreendedores.</span></li>
+        <li><strong>Profissionais</strong><span>Liberais e instituições diversas.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3. SERVIÇOS -->
+<section class="section services" id="servicos">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">O que fazemos</p>
+      <h2 class="h2">Os nossos serviços</h2>
+    </div>
+    <div class="service-grid">
+      <article class="service">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/></svg></span>
+        <h3>Identidade Visual</h3>
+        <p>Criação de logótipos, paleta de cores, tipografia e outros elementos que ajudam a construir a imagem da sua empresa.</p>
+      </article>
+      <article class="service">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span>
+        <h3>Materiais Gráficos</h3>
+        <p>Criação de flyers, cartões de visita, materiais publicitários e outros elementos de comunicação.</p>
+      </article>
+      <article class="service">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+        <h3>Websites</h3>
+        <p>Criação de websites institucionais modernos, responsivos e adaptados às necessidades da empresa.</p>
+      </article>
+      <article class="service">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.9 7.9"/></svg></span>
+        <h3>Venda de Domínios</h3>
+        <p>Registo de domínios para a sua empresa, com endereço próprio para o site e e-mails profissionais.</p>
+      </article>
+      <article class="service">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.4A4 4 0 1 1 12.6 8 4 4 0 0 1 16 11.4z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg></span>
+        <h3>Redes Sociais</h3>
+        <p>Apoio na criação, configuração e gestão da presença da empresa no Facebook e Instagram.</p>
+      </article>
+      <article class="service">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+        <h3>Google Business Profile</h3>
+        <p>Configuração e organização do perfil da empresa no Google e Google Maps.</p>
+      </article>
+      <article class="service">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/></svg></span>
+        <h3>WhatsApp Business</h3>
+        <p>Configuração e organização do WhatsApp Business para melhorar a comunicação com os clientes.</p>
+      </article>
+      <article class="service">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="3"/><polygon points="10 9 15.5 12 10 15 10 9"/></svg></span>
+        <h3>Vídeos Publicitários</h3>
+        <p>Criação de conteúdos visuais para divulgar empresas, produtos e serviços.</p>
+      </article>
+      <article class="service">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+        <h3>Publicidade Online</h3>
+        <p>Apoio na criação e gestão de campanhas publicitárias online.</p>
+      </article>
+      <article class="service">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="20" x2="6" y2="15"/><line x1="12" y1="20" x2="12" y2="9"/><line x1="18" y1="20" x2="18" y2="4"/></svg></span>
+        <h3>Gestão Digital</h3>
+        <p>Acompanhamento mensal das suas redes, Google e WhatsApp, com criação de conteúdos e relatórios.</p>
+      </article>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-dark" href="https://wa.me/244959275100?text=Ol%C3%A1!%20Gostaria%20de%20pedir%20um%20or%C3%A7amento." target="_blank" rel="noopener">Peça o seu orçamento</a>
+    </div>
+  </div>
+</section>
+
+<!-- 4. COMO TRABALHAMOS -->
+<section class="section dark" id="como-trabalhamos">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Do primeiro contacto à entrega</p>
+      <h2 class="h2">Como trabalhamos</h2>
+    </div>
+    <ol class="steps">
+      <li class="step"><span class="step-num" aria-hidden="true">1</span><h3>Entre em contacto</h3><p>Fale connosco e conte-nos o que precisa.</p></li>
+      <li class="step"><span class="step-num" aria-hidden="true">2</span><h3>Partilhe a sua ideia</h3><p>Explique o seu negócio, objetivos e necessidades.</p></li>
+      <li class="step"><span class="step-num" aria-hidden="true">3</span><h3>Receba uma proposta</h3><p>Analisamos o seu projeto e apresentamos uma solução adequada.</p></li>
+      <li class="step"><span class="step-num" aria-hidden="true">4</span><h3>Criamos o seu projeto</h3><p>Desenvolvemos o trabalho com criatividade, atenção e profissionalismo.</p></li>
+      <li class="step"><span class="step-num" aria-hidden="true">5</span><h3>Entregamos o resultado</h3><p>Receba uma solução preparada para representar a sua empresa.</p></li>
+    </ol>
+    <div class="payment">
+      <strong>Pagamento</strong>
+      <p>O valor é dividido em duas partes: 50% na entrada e 50% na entrega final. Aceitamos transferência bancária e PAYPAY.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. PORTFÓLIO -->
+<!-- Para juntar um trabalho novo: copiar um bloco <figure class="work"> de uma categoria com projetos e trocar a imagem,
+     o título e a nota. Quando uma categoria "Novo projeto em breve" passar a ter trabalhos, apagar o seu bloco <figure class="work work-soon">. -->
+<section class="section portfolio" id="portfolio">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Portfólio</p>
+      <h2 class="h2">Alguns dos nossos trabalhos</h2>
+      <p class="lead">Cada projeto é uma oportunidade para transformar uma ideia numa imagem que comunica, representa e cria resultados.</p>
+    </div>
+    <div class="chips" role="group" aria-label="Filtrar por categoria">
+      <button class="chip" type="button" data-filter="todos" aria-pressed="true">Todos</button>
+      <button class="chip" type="button" data-filter="identidade" aria-pressed="false">Logótipos e Identidade Visual</button>
+      <button class="chip" type="button" data-filter="flyers" aria-pressed="false">Flyers e Materiais Publicitários</button>
+      <button class="chip" type="button" data-filter="cartoes" aria-pressed="false">Cartões de Visita</button>
+      <button class="chip" type="button" data-filter="websites" aria-pressed="false">Websites</button>
+      <button class="chip" type="button" data-filter="outros" aria-pressed="false">Outros Projetos</button>
+    </div>
+    <div class="work-grid" id="work-grid">
+      <figure class="work" data-cat="identidade">
+        <button class="work-zoom" type="button" data-title="Logótipo Mimos da Mazy" aria-label="Ampliar: Logótipo Mimos da Mazy"><img src="img/mimos-logotipo.jpg" width="1264" height="932" alt="Logótipo Mimos da Mazy, em letra manuscrita cor de vinho" loading="lazy"></button>
+        <figcaption><span class="cat">Logótipos e Identidade Visual</span><span class="ttl">Logótipo</span><span class="note">Mimos da Mazy</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="flyers">
+        <button class="work-zoom" type="button" data-title="Flyer de serviços" aria-label="Ampliar: Flyer de serviços"><img src="img/mimos-servicos.jpg" width="900" height="1273" alt="Flyer de serviços da Mimos da Mazy, com decoração, presentes e serviços de estética" loading="lazy"></button>
+        <figcaption><span class="cat">Flyers e Materiais Publicitários</span><span class="ttl">Flyer de serviços</span><span class="note">Mimos da Mazy · decoração e estética</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="outros">
+        <button class="work-zoom" type="button" data-title="Dia dos Namorados" aria-label="Ampliar: Dia dos Namorados"><img src="img/mimos-namorados.jpg" width="900" height="1273" alt="Flyer de Dia dos Namorados da Mimos da Mazy, com cestas, flores e chocolates" loading="lazy"></button>
+        <figcaption><span class="cat">Outros Projetos</span><span class="ttl">Dia dos Namorados</span><span class="note">Mimos da Mazy</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="outros">
+        <button class="work-zoom" type="button" data-title="Preçário de rosas" aria-label="Ampliar: Preçário de rosas"><img src="img/mimos-rosas.jpg" width="900" height="1273" alt="Preçário de rosas para o Dia dos Namorados da Mimos da Mazy" loading="lazy"></button>
+        <figcaption><span class="cat">Outros Projetos</span><span class="ttl">Preçário de rosas</span><span class="note">Mimos da Mazy</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="cartoes">
+        <button class="work-zoom" type="button" data-title="Cartão de visita" aria-label="Ampliar: Cartão de visita"><img src="img/cartao-vladimiro-contactos.jpg" width="900" height="514" alt="Cartão de visita de gestor de hotelaria, lado dos contactos" loading="lazy"></button>
+        <figcaption><span class="cat">Cartões de Visita</span><span class="ttl">Cartão de visita</span><span class="note">Gestor de Hotelaria · contactos</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="cartoes">
+        <button class="work-zoom" type="button" data-title="Cartão de visita" aria-label="Ampliar: Cartão de visita"><img src="img/cartao-vladimiro-logo.jpg" width="900" height="514" alt="Cartão de visita de gestor de hotelaria, lado do logótipo" loading="lazy"></button>
+        <figcaption><span class="cat">Cartões de Visita</span><span class="ttl">Cartão de visita</span><span class="note">Gestor de Hotelaria · logótipo</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="cartoes">
+        <button class="work-zoom" type="button" data-title="Cartão de visita" aria-label="Ampliar: Cartão de visita"><img src="img/cartao-adriana-contactos.jpg" width="900" height="514" alt="Cartão de visita de esteticista e decoradora, lado dos contactos" loading="lazy"></button>
+        <figcaption><span class="cat">Cartões de Visita</span><span class="ttl">Cartão de visita</span><span class="note">Esteticista e Decoradora · contactos</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="cartoes">
+        <button class="work-zoom" type="button" data-title="Cartão de visita" aria-label="Ampliar: Cartão de visita"><img src="img/cartao-adriana-nome.jpg" width="900" height="514" alt="Cartão de visita de esteticista e decoradora, lado do nome" loading="lazy"></button>
+        <figcaption><span class="cat">Cartões de Visita</span><span class="ttl">Cartão de visita</span><span class="note">Esteticista e Decoradora · nome</span></figcaption>
+      </figure>
+      <figure class="work" data-cat="outros">
+        <button class="work-zoom" type="button" data-title="Menu Pratos da Casa" aria-label="Ampliar: Menu Pratos da Casa"><img src="img/menu-sandimba.jpg" width="900" height="1273" alt="Menu Pratos da Casa da Sandimba Comercial, com hambúrguer, cachorro quente e frango" loading="lazy"></button>
+        <figcaption><span class="cat">Outros Projetos</span><span class="ttl">Menu Pratos da Casa</span><span class="note">Sandimba Comercial</span></figcaption>
+      </figure>
+      <figure class="work work-soon" data-cat="websites">
+        <div class="work-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg><span>Novo projeto em breve</span></div>
+        <figcaption><span class="cat">Websites</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 6. CONTACTOS -->
+<section class="section contacts" id="contactos">
+  <div class="wrap contact-grid">
+    <div class="contact-info">
+      <div class="section-head" style="margin-bottom:0">
+        <p class="eyebrow">Contactos</p>
+        <h2 class="h2">Bora Fazer Acontecer?</h2>
+      </div>
+
+      <div class="contact-block">
+        <h3>Telefone / WhatsApp</h3>
+        <div>
+          <div class="wa-line">
+            <span class="num">959 275 100</span>
+            <a class="btn btn-gold btn-sm" href="https://wa.me/244959275100?text=Ol%C3%A1!%20Gostaria%20de%20falar%20sobre%20o%20meu%20projeto." target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/></svg>
+              Falar no WhatsApp
+            </a>
+          </div>
+          <div class="wa-line">
+            <span class="num">959 383 952</span>
+            <a class="btn btn-dark btn-sm" href="https://wa.me/244959383952?text=Ol%C3%A1!%20Gostaria%20de%20falar%20sobre%20o%20meu%20projeto." target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/></svg>
+              Falar no WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-block">
+        <h3>E-mail</h3>
+        <p><a class="mail-link" href="mailto:fredericodaniel2010@gmail.com">fredericodaniel2010@gmail.com</a></p>
+      </div>
+
+      <div class="contact-block">
+        <h3>Redes sociais</h3>
+        <div class="socials">
+          <a class="social" href="https://www.facebook.com/profile.php?id=61596044760011" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            <span>Facebook<small>Página VisualPro</small></span>
+          </a>
+          <a class="social" href="https://www.instagram.com/visualpro771" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.4A4 4 0 1 1 12.6 8 4 4 0 0 1 16 11.4z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
+            <span>Instagram<small>@visualpro771</small></span>
+          </a>
+          <a class="social" href="https://www.tiktok.com/@visual.pro12" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V3a5 5 0 0 0 5 5"/></svg>
+            <span>TikTok<small>@visual.pro12</small></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h3>Envie-nos uma mensagem</h3>
+      <p>Preencha os campos e abrimos o WhatsApp com a sua mensagem pronta a enviar.</p>
+      <form id="contact-form">
+        <div class="form-row two">
+          <div class="field"><label for="f-nome">Nome</label><input id="f-nome" name="nome" type="text" autocomplete="name" required></div>
+          <div class="field"><label for="f-empresa">Nome da empresa</label><input id="f-empresa" name="empresa" type="text" autocomplete="organization"></div>
+        </div>
+        <div class="form-row two">
+          <div class="field"><label for="f-tel">Número de telefone</label><input id="f-tel" name="telefone" type="tel" autocomplete="tel" inputmode="tel" required></div>
+          <div class="field"><label for="f-email">E-mail</label><input id="f-email" name="email" type="email" autocomplete="email"></div>
+        </div>
+        <div class="field"><label for="f-msg">Mensagem</label><textarea id="f-msg" name="mensagem" required></textarea></div>
+        <button class="btn btn-gold" type="submit">Enviar mensagem</button>
+        <div class="form-result" id="form-result" role="status" aria-live="polite" hidden></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="img/logo-tile.jpg" width="56" height="56" alt="Logótipo VisualPro">
+        <strong>VisualPro — Ideias que ganham vida</strong>
+        <p>Identidade visual • Design • Presença digital</p>
+      </div>
+      <div>
+        <h3>Redes sociais</h3>
+        <ul>
+          <li><a href="https://www.facebook.com/profile.php?id=61596044760011" target="_blank" rel="noopener">Facebook</a></li>
+          <li><a href="https://www.instagram.com/visualpro771" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://www.tiktok.com/@visual.pro12" target="_blank" rel="noopener">TikTok</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Contactos</h3>
+        <ul>
+          <li><a href="https://wa.me/244959275100" target="_blank" rel="noopener"><span class="num-s">959 275 100</span> · WhatsApp</a></li>
+          <li><a href="https://wa.me/244959383952" target="_blank" rel="noopener"><span class="num-s">959 383 952</span> · WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-bottom">© 2026 VisualPro. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<dialog class="lightbox" id="lightbox" aria-label="Ampliar trabalho">
+  <div class="lightbox-bar"><span id="lightbox-cap"></span><button type="button" data-close>Fechar</button></div>
+  <img src="" alt="">
+</dialog>
+
+<script>
+(function () {
+  var WA_NUMBER = "244959275100";
+
+  /* Menu em telemóvel */
+  var toggle = document.getElementById("nav-toggle");
+  var nav = document.getElementById("menu");
+  function setMenu(open) {
+    nav.classList.toggle("open", open);
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    toggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+  }
+  toggle.addEventListener("click", function () { setMenu(!nav.classList.contains("open")); });
+  nav.addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); });
+
+  /* Filtro do portfólio */
+  var chips = document.querySelectorAll(".chip");
+  var works = document.querySelectorAll(".work");
+  chips.forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      var f = chip.getAttribute("data-filter");
+      chips.forEach(function (c) { c.setAttribute("aria-pressed", c === chip ? "true" : "false"); });
+      works.forEach(function (w) { w.hidden = !(f === "todos" || w.getAttribute("data-cat") === f); });
+    });
+  });
+
+  /* Ampliar trabalhos do portfólio */
+  var lb = document.getElementById("lightbox");
+  var lbImg = lb.querySelector("img");
+  var lbCap = document.getElementById("lightbox-cap");
+  document.querySelectorAll(".work-zoom").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var im = btn.querySelector("img");
+      lbImg.src = im.getAttribute("src");
+      lbImg.alt = im.alt;
+      lbCap.textContent = btn.getAttribute("data-title");
+      try { lb.showModal(); } catch (err) {}
+    });
+  });
+  lb.addEventListener("click", function (e) {
+    if (e.target === lb || e.target.closest("[data-close]")) lb.close();
+  });
+
+  /* Formulário: prepara a mensagem para o WhatsApp (a página não envia nada sozinha) */
+  var form = document.getElementById("contact-form");
+  var result = document.getElementById("form-result");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = function (n) { return (form.elements[n].value || "").trim(); };
+    var lines = ["Olá VisualPro! Gostaria de falar sobre um projeto.", "Nome: " + v("nome")];
+    if (v("empresa")) lines.push("Empresa: " + v("empresa"));
+    lines.push("Telefone: " + v("telefone"));
+    if (v("email")) lines.push("E-mail: " + v("email"));
+    lines.push("Mensagem: " + v("mensagem"));
+    var url = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(lines.join("\n"));
+
+    result.textContent = "";
+    var p = document.createElement("p");
+    p.textContent = "A sua mensagem está pronta. Toque no botão para a enviar à VisualPro pelo WhatsApp.";
+    var a = document.createElement("a");
+    a.className = "btn btn-dark";
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "Abrir no WhatsApp";
+    result.appendChild(p);
+    result.appendChild(a);
+    result.hidden = false;
+  });
+})();
+</script>
